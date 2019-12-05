@@ -1,0 +1,85 @@
+/*!*главная*!*/
+/***/
+/*{*/
+    /*font-family: HGHeiseiKakugothictaiW3;*/
+    /*font-size: large;*/
+/*}*/
+
+/*body*/
+/*{*/
+    /*background: #c5b9ca;*/
+/*}*/
+/*span.title*/
+/*{*/
+    /*font-family: HGHeiseiKakugothictaiW3;*/
+    /*font-size: 35px;*/
+    /*height: 80px;*/
+    /*width: 800px;*/
+    /*background: #ca2544;*/
+/*}*/
+/*nav ul a*/
+/*{*/
+    /*width: 20px;*/
+    /*height: 50px;*/
+    /*background: #486cca;*/
+
+/*}*/
+/*nav ul a:hover*/
+/*{*/
+    /*background: #4555a9;*/
+/*}*/
+/*a*/
+/*{*/
+    /*display: block;*/
+    /*text-decoration: none;*/
+    /*background: #cac61a;*/
+/*}*/
+/*span p*/
+/*{*/
+    /*margin-left: 100px;*/
+    /*margin-right: 100px;*/
+    /*background: #43ca34;*/
+/*}*/
+
+
+div.text
+{
+    margin-right: 200px;
+    margin-left: 200px;
+    background: rgb(243, 243, 243);
+
+}
+.text1
+{
+    margin-left: 10px;
+}
+
+/*div h1*/
+/*{*/
+   /*margin-left: 50px;*/
+/*}*/
+
+form.form-register
+{
+    /*margin-top: 20px;*/
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+form.form-login
+{
+    /*margin-top: 20px;*/
+    margin-left: 30%;
+    margin-right: 30%;
+
+}
+form.form-login
+{
+    margin-left: 30%;
+    margin-right: 30%;
+
+}
+div.jumbotron:hover
+{
+    border-color: #505260;
+}
