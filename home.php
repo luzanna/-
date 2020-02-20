@@ -39,11 +39,12 @@ $mysqli = new mysqli($host, $user, $password,  $db);
 <?php
 session_start();
 include '/menu2.php';
+
 $username = $_SESSION["username"];
-$connection_query = $mysqli->prepare("select * from student where username = ?");
-$connection_query->bind_param("s", $username);
-$connection_query->execute();
-$user = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
+$connection_query = $mysqli -> prepare("select * from student where username = ?");
+$connection_query -> bind_param("s", $username);
+$connection_query -> execute();
+$user = $connection_query -> get_result() -> fetch_all(MYSQLI_ASSOC);
 ?>
 <div class="page-header" style="text-align: center">
     <h1>
@@ -59,7 +60,6 @@ $user = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
     <div class="col-xs-4 col-md-2"></div>
     <div class="col-xs-10 col-md-8" style="background-color: rgb(243, 243, 243)">
 <!--        <ul class="nav nav-tabs">-->
-
         <div class="bs-example bs-example-tabs">
             <ul id="myTab" class="nav nav-tabs">
                 <li style='display: inline-block; margin-right: 7%'class="active">
@@ -173,17 +173,17 @@ $user = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
                             <?php
                             //запрос оценки
                             $username = $_SESSION['username'];
-                            $connection_query = $mysqli->prepare("select * from solved_test where username=?");
-                            $connection_query->bind_param("s", $username);
-                            $connection_query->execute();
-                            $user = $connection_query->get_result()->fetch_assoc();
+                            $connection_query = $mysqli -> prepare("select * from solved_test where username=?");
+                            $connection_query -> bind_param("s", $username);
+                            $connection_query -> execute();
+                            $user = $connection_query -> get_result() -> fetch_assoc();
+
                             foreach ($user as $row) {
                                 for ($i = 1; $i < 15; $i++) {
                                     echo "<tr><td class=\"info\">Тест №" . $i . "</td>";
                                     //  если есть оценка за тест{}
                                     if ($row.['result'] != null) {
-                                        if ($row['number_test']==$i)
-                                        {
+                                        if ($row['number_test']==$i) {
                                             if ($row.['result'] >= 90)
                                                 echo "<td class=\"success\">" .$row.['result']."%</td>";
                                             elseif ($row.['result'] < 45)
@@ -226,8 +226,7 @@ $user = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
 </body>
 </html>
 <?php
-if(!empty($_POST))
-{
+if ( !empty($_POST) ) {
     $username = $_POST["username"];
     $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
     $email = $_POST["email"];
@@ -236,8 +235,7 @@ if(!empty($_POST))
     $second_name = $_POST["second_name"];
 
     $articles = $mysqli->query("select username from student where username='$username'");
-    if ($articles->num_rows == 1)
-    {
+    if ($articles->num_rows == 1) {
         echo "<div class=\"row\">
                 <div class=\"col-md-4\"></div>
                 <div class=\"col-md-4\"><a href=\"#myModal2\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
@@ -245,9 +243,8 @@ if(!empty($_POST))
                 <div class=\"col-md-4\"></div>
             </div>";
     }
-    $articles = $mysqli->query("select  username from student where username='$username'");
-    if ($articles->num_rows == 0)
-    {
+    $articles = $mysqli -> query("select  username from student where username='$username'");
+    if ($articles -> num_rows == 0) {
         if ((preg_match('[^[a-zA-Z]+$]', $username)) &&
             (preg_match('[^[a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9]{1,10}.[a-zA-Z]{2,6}$]', $email)) &&
             (preg_match('[^[а-яА-ЯёЁ]+$]u', $last_name)) &&
@@ -255,59 +252,24 @@ if(!empty($_POST))
             (preg_match('[^[а-яА-ЯёЁ]+$]u', $second_name))
         ) {
             echo $user[0]['id_student'];
-            $connect = $mysqli->prepare("
-            update student set [first_name=?, second_name=?, last_name=?, username=?, password=?, email=?]
-            where id_student=(select id_student from student where username=? )");
+            $connect = $mysqli -> prepare("
+            update student set [first_name = ?, second_name = ?, last_name = ?, username = ?, password = ?, email = ?]
+            where id_student = (select id_student from student where username= ? )");
             $connect->bind_param("sssssss", $first_name, $last_name, $username, $password, $email, $_SESSION['username']);
-            if (!($connect->execute())) {
-                echo $mysqli->error;
+            if (!($connect -> execute())) {
+                echo $mysqli -> error;
             } else {
                 $_SESSION["username"] = $username;
                 header('location: /home.php?name=' . $_SESSION['username']);
             }
-//        } elseif ((preg_match('[^[a-zA-Z]+$]', $username)) &&
-//            (preg_match('[^[a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9]{1,10}.[a-zA-Z]{2,6}$]', $email)) &&
-//            (preg_match('[^[а-яА-ЯёЁ]+$]u', $last_name)) &&
-//            (preg_match('[^[а-яА-ЯёЁ]+$]u', $first_name))
-//        ) {
-//            $connect = $mysqli->prepare("insert into student VALUES (DEFAULT, ?,NULL ,?,?,?,?,1) WHERE id_student=?");
-//            $connect->bind_param("sssssi", $first_name, $last_name, $username, $password, $email, $user[0]['id_student']);
-//
-//            if (!($connect->execute())) {
-//                echo $mysqli->error;
-//            } else {
-//                $_SESSION["username"] = $username;
-//                header('location: /home.php?name=' . $_SESSION['username']);
-//            }
-//        } elseif
-//        ((preg_match('[^[a-zA-Z]+$]', $username)) &&
-//            (preg_match('[^[a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9]{1,10}.[a-zA-Z]{2,6}$]', $email))
-//        )
-//        {
-//            $connect = $mysqli->prepare("insert into student VALUES (DEFAULT, NULL ,NULL ,NULL ,?,?,?,1) WHERE id_student=?");
-//            $connect->bind_param("sssi", $username, $password, $email,$user[0]['id_student']);
-//
-//            if (!($connect->execute())) {
-//                echo $mysqli->error;
-//            } else {
-//                $_SESSION["username"] = $username;
-//                header('location: /home.php?name=' . $_SESSION['username']);
-//            }
-        }
-        else
-        {
+        } else {
             echo "данные невенрые";
-
         }
     }
-    else
-    {
+    else {
        echo "пользователь с таким именем уже есть";
     }
-}
-else
-{
-
+} else {
         echo "данные не отправлены";
 }
 ?>

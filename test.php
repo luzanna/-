@@ -37,12 +37,14 @@ $mysqli = new mysqli($host, $user, $password,  $db);
     <body>
     <?php
     session_start();
+
     $number_test = $_GET["number_test"];
-    $connection_query = $mysqli->prepare("select * from test where number_test =?");
-    $connection_query->bind_param("i", $number_test);
-    $connection_query->execute();
+    $connection_query = $mysqli -> prepare("select * from test where number_test = ?");
+    $connection_query -> bind_param("i", $number_test);
+    $connection_query -> execute();
     $question_test = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
-    $result=count($question_test);
+    $result = count($question_test);
+
     include '/menu2.php';
     $c=count($_POST);
 
@@ -70,13 +72,11 @@ $mysqli = new mysqli($host, $user, $password,  $db);
         foreach ($question_test as $row) {
             var_dump($_POST);
             echo "<p></p>";
-            var_dump($row['answer_right']);
-            if($_POST["answer_{$row['id_test']}"]==null)
-            {
+            var_dump( $row['answer_right'] );
+            if ($_POST["answer_{$row['id_test']}"] == null) {
                 $_POST["answer_{$row['id_test']}"]='Вы пропустили этот вопрос';
             }
-                if ($_POST["answer_{$row['id_test']}"]==$row['answer_right'])
-                {
+            if ($_POST["answer_{$row['id_test']}"]==$row['answer_right']) {
                     echo "
                     <div class='jumbotron' style=\"background-color: rgba(143, 243, 168, 0.5)\">
                         <h3 style='margin-left: 10%; text-align: center'>Вопрос №" . $i . "</h3>
@@ -89,11 +89,8 @@ $mysqli = new mysqli($host, $user, $password,  $db);
                         </div>
                         <hr>
                         </div>";
-                    $mark+=1;
-                }
-
-                else
-                {
+                    $mark += 1;
+                } else {
                     echo "
                         <div class='jumbotron' style=\"background-color: rgba(243, 201, 212, 0.5)\">
                             <h3 style='margin-left: 10%; text-align: center'>Вопрос №" . $i . "</h3>
@@ -117,7 +114,7 @@ $mysqli = new mysqli($host, $user, $password,  $db);
             $i++;
         }
 
-        $p= round($mark/$result*100);
+        $p = round($mark/$result*100);
         echo "
         <div class='jumbotron' style=\"background-color: rgba(132, 178, 243, 0.5)\">
             <h3 style='margin-left: 10%; text-align: center'>Результаты " . $number_test . " теста:</h3>
@@ -132,59 +129,47 @@ $mysqli = new mysqli($host, $user, $password,  $db);
             <hr>
         </div>
         ";
-//        unset($_POST);
-        $username=$_SESSION['username'];
-
-        $res = $mysqli->query("select id_student from student where username='$username'");
-        $id_student=$res->fetch_assoc();
-
-        $var2=$mysqli->query("SELECT COUNT(number_test) FROM solved_test WHERE (number_test='$number_test' and id_student='$id_student')");
-        $var3=$var2->fetch_assoc();
+        $username = $_SESSION['username'];
+        $res = $mysqli -> query("select id_student from student where username='$username'");
+        $id_student = $res -> fetch_assoc();
+        $var2 = $mysqli -> query("SELECT COUNT(number_test) FROM solved_test WHERE (number_test = '$number_test' and id_student = '$id_student')");
+        $var3 = $var2 -> fetch_assoc();
         var_dump($var2);
-        if($var2==0)
-        {
-            $connection_query = $mysqli->prepare("insert into solved_test VALUES ( DEFAULT ,?, ?,?)");
-            $connection_query->bind_param("iii", $number_test, $id_student['id_student'], $p);
-            $connection_query->execute();
-            $test = $connection_query->get_result()->fetch_assoc(MYSQLI_ASSOC);
+        if ($var2 == 0) {
+            $connection_query = $mysqli -> prepare("insert into solved_test VALUES ( DEFAULT , ? , ? , ?)");
+            $connection_query -> bind_param("iii", $number_test, $id_student['id_student'], $p);
+            $connection_query -> execute();
+            $test = $connection_query -> get_result() -> fetch_assoc(MYSQLI_ASSOC);
+        } else {
+            $connection_query = $mysqli -> prepare("UPDATE solved_test SET result = ? WHERE (id_student = '$id_student' and number_test = '$number_test')");
+            $connection_query -> bind_param("i", $p);
+            $connection_query -> execute();
+            $test = $connection_query -> get_result() -> fetch_assoc(MYSQLI_ASSOC);
         }
-        else
-        {
-            $connection_query = $mysqli->prepare("UPDATE solved_test SET result=? WHERE (id_student='$id_student' and number_test='$number_test')");
-            $connection_query->bind_param("i", $p);
-            $connection_query->execute();
-            $test = $connection_query->get_result()->fetch_assoc(MYSQLI_ASSOC);
-        }
-
-
-
-    }
-    else {
-        if ($c<$result && $c!=0)
-        {
+    } else {
+        if ($c<$result && $c!=0) {
             var_dump($_POST);
-
             echo "нужно ответить на все вопросы";}
-        echo "    
-    <div class=\"page-header\" style=\"text-align: center\">
-        <h1>
-            Тестирование
-            <small>
-                <p>
-                    <span class=\"glyphicon glyphicon-ok\"> здесь можно проверить свои знания</span>
-                </p>
-            </small>
-        </h1>
-    </div>
-    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-    <form class=\"form-test\" method=\"post\" action=\"test.php?number_test=$number_test\">
-    <div class=\"row\">
-        <div class=\"col-xs-5 col-md-3\"></div>
-        <div class=\"col-xs-8 col-md-6\" style=\"background-color: rgb(243, 243, 243)\">";
+            echo "    
+            <div class=\"page-header\" style=\"text-align: center\">
+                <h1>
+                    Тестирование
+                    <small>
+                        <p>
+                            <span class=\"glyphicon glyphicon-ok\"> здесь можно проверить свои знания</span>
+                        </p>
+                    </small>
+                </h1>
+            </div>
+            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+            <form class=\"form-test\" method=\"post\" action=\"test.php?number_test=$number_test\">
+            <div class=\"row\">
+                <div class=\"col-xs-5 col-md-3\"></div>
+                <div class=\"col-xs-8 col-md-6\" style=\"background-color: rgb(243, 243, 243)\">";
 
         $s = 1;
         echo "
-                        <h3 style='margin-left: 10%; text-align: center'>Тест №" . $question_test[0]['number_test'] . "</h3>";
+             <h3 style='margin-left: 10%; text-align: center'>Тест №" . $question_test[0]['number_test'] . "</h3>";
         foreach ($question_test as $row) {
             $p = $s / $result * 100;
             if (stristr($row['question'], '______')) {
@@ -230,28 +215,30 @@ $mysqli = new mysqli($host, $user, $password,  $db);
                         " . $row['answer_right'] . "
                         </div>
                         <hr>";
-                if($row['answer2']!=null){
+                if ($row['answer2'] != null){
                         echo" 
                         <div class=\"container-fluid\">
                             <span class=\"container-fluid-addon\">
                                 <input type=\"radio\" name=\"answer_{$row['id_test']}\" value=\"{$row['answer2']}\">
                             </span>" . $row['answer2'] . "</div>
                         <hr>";}
-                    if($row['answer3']!=null){
+                    if ($row['answer3']!=null){
                         echo"
                         
                         <div class=\"container-fluid\">
                             <span class=\"container-fluid-addon\">
                                 <input type=\"radio\" name=\"answer_{$row['id_test']}\" value=\"{$row['answer3']}\">
                             </span>" . $row['answer3'] . "</div>
-                        <hr>";}
-                        if($row['answer4']!=null){
+                        <hr>";
+                    }
+                    if ($row['answer4']!=null){
                             echo"
                         <div class=\"container-fluid\">
                             <span class=\"container-fluid-addon\">
                                 <input type=\"radio\" name=\"answer_{$row['id_test']}\" value=\"{$row['answer4']}\">
                             </span>" . $row['answer4'] . "</div> 
-                        <hr>";}
+                        <hr>";
+                    }
                 echo "
                         </div>"
                 ;

@@ -43,47 +43,32 @@ $mysqli = new mysqli($host, $user, $password,  $db);
     <div class="page-header" style="text-align: center">
         <h1>Учебник</h1>
     </div>
-    
-    
-    
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <div class="container">
-
-        <div class="jumbotron"><!--    <ul class="pager">-->
-<!--        <li><a href="#">Предыдущая</a></li>-->
-<!--        <li><a href="#">Следующая</a></li>-->
-<!--    </ul>-->
+        <div class="jumbotron">
 
         <?php
-        
         $number_chapter = $_GET["number_chapter"];
-
-        $connection_query = $mysqli->prepare("select * from book where number_chapter = ?");
-        $connection_query->bind_param("i", $number_chapter);
-        $connection_query->execute();
-        $chapter_text = $connection_query->get_result()->fetch_all(MYSQLI_ASSOC);
-        echo
-            "
- <div class=\"page-header\" style=\"text-align: center\">
-        <h2>Глава ".$chapter_text[0]['number_chapter']."</h2>
-        
-    </div>
-
-    <div class=\"row\">
-  <div class=\"col-md-6\">.col-md-6</div>
-  <div class=\"col-md-6\">.col-md-6</div>
-</div>
-    
-        <span>текст главы:</span>
-                <span>".$chapter_text[0]['chapter_text']."</span>
-        
+        $connection_query = $mysqli -> prepare("select * from book where number_chapter = ?");
+        $connection_query -> bind_param("i", $number_chapter);
+        $connection_query -> execute();
+        $chapter_text = $connection_query -> get_result() -> fetch_all(MYSQLI_ASSOC);
+        echo "
+        <div class=\"page-header\" style=\"text-align: center\">
+            <h2>Глава ".$chapter_text[0]['number_chapter']."</h2>
         </div>
-        
+        <div class=\"row\">
+            <div class=\"col-md-6\">.col-md-6</div>
+            <div class=\"col-md-6\">.col-md-6</div>
+        </div>
+        <span>текст главы:</span>
+        <span>".$chapter_text[0]['chapter_text']."</span>
+        </div>
     </div>";
 ?>
     </body>

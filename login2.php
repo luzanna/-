@@ -61,23 +61,19 @@ $mysqli = new mysqli($host, $user, $password,  $db);
 </div>
 <?php
 session_start();
-if(!empty($_POST))
-{
+
+if ( !empty($_POST) ){
     $connection_query = $mysqli->prepare("select * from student where username = ?");
     $connection_query->bind_param("s", $_POST['username']);
     $connection_query->execute();
     $user = $connection_query->get_result()->fetch_assoc();
     $v = password_verify($_POST["password"], $user["password"]);
 
-    if ($v)
-    {
-                $_SESSION['username'] = $_POST["username"];
+    if ($v){
+        $_SESSION['username'] = $_POST["username"];
         header('location: /home.php?name='.$_SESSION['username']);
-//        echo "если пользователь есть в базе, то переходим на домашнюю страницу  ";
-//        echo $_SESSION['username'];
     }
-    else
-    {
+    else {
         echo "<div class=\"page-header\" style=\"text-align: center\">
               <h1>Авторизация <small>
             <p>
@@ -85,40 +81,31 @@ if(!empty($_POST))
             </p>
               </small></h1>
             </div>
-
-
-
-                <form class=\"form-login\" method=\"post\" action=\"login2.php\">
+                <form class=\"form-login\" method=\"post\" action=\"login.php\">
                      <div class=\"input-group input-group-lg\">
                    <span class=\"input-group-addon\">
-
-                   <span class=\"glyphicon glyphicon-pencil\"> </span>
-
-               </span>
+                        <span class=\"glyphicon glyphicon-pencil\"> </span>
+                   </span>
                  <input type=\"text\" class=\"form-control\" placeholder=\"Логин\" name=\"username\"
                data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
               </div>
-
-                 <div class=\"input-group input-group-lg\">
+              <div class=\"input-group input-group-lg\">
                 <span class=\"input-group-addon\">
-                 <span class=\"glyphicon glyphicon-pencil\"> </span>
-                 </span>
-                 <input type=\"password\" class=\"form-control\" placeholder=\"Пароль\" name=\"password\"
-               data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
-                 </div>
-                 <p> </p>
+                   <span class=\"glyphicon glyphicon-pencil\"> </span>
+                </span>
+                <input type=\"password\" class=\"form-control\" placeholder=\"Пароль\" name=\"password\"
+                        data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
+              </div>
+              <p> </p>
+              <button type=\"submit\" class=\"btn btn-default btn-lg\" style=\"margin-left: 45%;  margin-top: 20px\" >Войти</button>
+              </form>";
 
-                 <button type=\"submit\" class=\"btn btn-default btn-lg\" style=\"margin-left: 45%;  margin-top: 20px\" >Войти</button>
-                </form>";
-
-        echo"<a href=\"#myModallogin\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
-        style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a>";
+                 echo"<a href=\"#myModallogin\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
+                     style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a>";
     }
 }
-else
-{
-    if(isset($_SESSION['username']))
-    {
+else{
+    if ( isset($_SESSION['username']) ) {
                 header('location: /home.php');
     }
     else
@@ -131,28 +118,25 @@ else
             </p>
               </small></h1>
             </div>
-                <form class=\"form-login\" method=\"post\" action=\"login2.php\">
+                <form class=\"form-login\" method=\"post\" action=\"login.php\">
                      <div class=\"input-group input-group-lg\">
                    <span class=\"input-group-addon\">
-
-                   <span class=\"glyphicon glyphicon-pencil\"> </span>
-
-               </span>
+                        <span class=\"glyphicon glyphicon-pencil\"> </span>
+                    </span>
                  <input type=\"text\" class=\"form-control\" placeholder=\"Логин\" name=\"username\"
-               data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
-              </div>
+                        data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
+            </div>
 
-                 <div class=\"input-group input-group-lg\">
+            <div class=\"input-group input-group-lg\">
                 <span class=\"input-group-addon\">
-                 <span class=\"glyphicon glyphicon-pencil\"> </span>
-                 </span>
-                 <input type=\"password\" class=\"form-control\" placeholder=\"Пароль\" name=\"password\"
-               data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
-                 </div>
-                 <p> </p>
-
-                 <button type=\"submit\" class=\"btn btn-default btn-lg\" style=\"margin-left: 45%;  margin-top: 20px\" >Войти</button>
-                </form>
+                     <span class=\"glyphicon glyphicon-pencil\"> </span>
+                </span>
+                <input type=\"password\" class=\"form-control\" placeholder=\"Пароль\" name=\"password\"
+                        data-toggle=\"tooltip\" data-placement=\"right\" title=\"Только буквы английского алфавита и цифры\">
+            </div>
+            <p> </p>
+            <button type=\"submit\" class=\"btn btn-default btn-lg\" style=\"margin-left: 45%;  margin-top: 20px\" >Войти</button>
+       </form>
             ";
 }
 ?>

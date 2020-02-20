@@ -39,8 +39,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <?php
-                        if (isset($_SESSION['username']))
-                        {
+                        if (isset($_SESSION['username'])) {
                         ?>
                             <li><a href = "test.php?number_test=1" > Тест 1 </a ></li >
                             <li><a href = "test.php?number_test=2" > Тест 2 </a ></li >
@@ -59,9 +58,7 @@
                             <li><a href = "test.php?number_test=15" > Тест 15 </a ></li >
                             <li><a href = "test.php?number_test=16" > Тест 16 </a ></li >
                         <?php
-                        }
-                        else
-                        {
+                        } else {
                         ?>
                             <li class="disabled" ><a href = "#" > Тест 1 </a ></li >
                             <li class="disabled" ><a href = "#" > Тест 2 </a ></li >
@@ -90,7 +87,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                        style="margin-right: 10px">
                         <?php
-                        if (isset($_SESSION['username']))
+                        if ( isset($_SESSION['username']) )
                             echo $_SESSION['username'];
                         else
                             echo "Личный кабинет";
@@ -98,7 +95,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <?php
-                        if (isset($_SESSION['username']))
+                        if ( isset($_SESSION['username']) )
                         {
                             $username=$_SESSION['username'];
                             echo " <li><a href=\"home.php?user=$username\">Домой</a></li>
@@ -107,7 +104,7 @@
                         else
 //                            echo "   <li><a href=\"#myModal\" data-toggle=\"modal\">Войти</a></li>
 //                        <li><a href=\"#myModal2\" data-toggle=\"modal\">Зарегистрироваться</a></li>";
-                            echo " <li><a href=\"login2.php\">войти</a></li>
+                            echo " <li><a href=\"login.php\">войти</a></li>
                                     <li><a href=\"reg.php\"> регистрация</a></li>";
                         ?>
                     </ul>

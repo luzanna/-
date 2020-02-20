@@ -10,7 +10,6 @@ $db = 'db_diplom';
 $user = 'root';
 $password = '';
 $mysqli = new mysqli($host, $user, $password,  $db);
-//session_start();
 ?>
 <!doctype html>
 <html lang="ru">
@@ -61,7 +60,7 @@ $mysqli = new mysqli($host, $user, $password,  $db);
 </div>
 <?php
 session_start();
-if(!empty($_POST))
+if ( !empty($_POST) )
 {
     $username = $_POST["username"];
     $password = password_hash($_POST["password"],PASSWORD_BCRYPT);
@@ -72,18 +71,17 @@ if(!empty($_POST))
     $second_name = $_POST["second_name"];
 
     $articles = $mysqli->query("select  username from student where username='$username' or email='$email'");
-    if ($articles->num_rows == 2)
-    {
+
+    if ($articles->num_rows == 2) {
         echo "<div class=\"row\">
                 <div class=\"col-md-4\"></div>
                 <div class=\"col-md-4\"><a href=\"#myModal2\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
-        style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a></div>
+                 style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a></div>
                 <div class=\"col-md-4\"></div>
             </div>";
     }
     $articles = $mysqli->query("select  username from student where username='$username' or email='$email'");
-    if ($articles->num_rows == 0)
-    {
+    if ($articles->num_rows == 0) {
         if ((preg_match('[^[a-zA-Z]+$]', $username)) &&
             (preg_match('[^[a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9]{1,10}.[a-zA-Z]{2,6}$]', $email)) &&
             (preg_match('[^[а-яА-ЯёЁ]+$]u', $last_name)) &&
@@ -93,7 +91,7 @@ if(!empty($_POST))
             $connect = $mysqli->prepare("insert into student VALUES (DEFAULT, ?,?,?,?,?,?,1)");
             $connect->bind_param("ssssss", $first_name, $second_name, $last_name, $username, $password, $email);
 
-            if (!($connect->execute())) {
+            if ( !($connect->execute()) ) {
                 echo $mysqli->error;
             } else {
                 $_SESSION["username"] = $username;
@@ -121,15 +119,14 @@ if(!empty($_POST))
             $connect = $mysqli->prepare("insert into student VALUES (DEFAULT, NULL ,NULL ,NULL ,?,?,?,1)");
             $connect->bind_param("sss", $username, $password, $email);
 
-            if (!($connect->execute())) {
+            if ( !($connect->execute()) ) {
                 echo $mysqli->error;
             } else {
                 $_SESSION["username"] = $username;
                 header('location: /home.php?name=' . $_SESSION['username']);
             }
         }
-        else
-        {
+        else {
             include '/menu2.php';
             echo "   <div class=\"page-header\" style=\"text-align: center\">
             <h1>Регистрация
@@ -201,26 +198,11 @@ if(!empty($_POST))
 
             echo"<a href=\"#myModal\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
         style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a>";
-//            echo "
-
-
-
-
-//
-//<div class=\"row\">
-//                    <div class=\"col-md-4\"></div>
-//                    <div class=\"col-md-4\"><a href=\"#myModal\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"
-//                    style=\"align-content: center\" >Что то пошло не так...</a></div>
-//                    <div class=\"col-md-4\"></div>
-//                </div>"
-            ;
-
         }
     }
-    else
-    {
-        include '/menu2.php';
-        echo "  
+    else {
+         include '/menu2.php';
+         echo "  
   
    <div class=\"page-header\" style=\"text-align: center\">
             <h1>Регистрация
@@ -293,16 +275,12 @@ if(!empty($_POST))
         echo"<a href=\"#myModallogin\" class=\"btn btn-default btn-lg\" data-toggle=\"modal\"  
         style=\"margin-left: 45%;  margin-top: 20px\" >Что то пошло не так...</a>";
     }
-}
-else
-{
-    if(isset($_SESSION['username']))
-    {
+} else {
+    if ( isset($_SESSION['username']) ) {
         header('location: /home.php');
-    }
-    else
+    } else
         include '/menu2.php';
-    echo "
+     echo "
                <div class=\"page-header\" style=\"text-align: center\">
             <h1>Регистрация
                 <small>
@@ -369,8 +347,7 @@ else
                 <div class=\"col-md-4\"><button type=\"submit\" class=\"btn btn-default btn-lg\" style=\"align-content: center\"  >Регистрация</button></div>
                 <div class=\"col-md-4\"></div>
             </div>
-        </form>
-            ";
+        </form>";
 }
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
